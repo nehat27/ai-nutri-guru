@@ -11,7 +11,11 @@ import {
   ShieldCheck, 
   Sparkles, 
   UserCheck, 
-  Scale 
+  Scale,
+  Utensils,
+  CalendarDays,
+  BarChart,
+  Medal
 } from "lucide-react";
 
 const About = () => {
@@ -49,7 +53,60 @@ const About = () => {
             </CardContent>
           </Card>
           
-          {/* Features Grid */}
+          {/* How It Works Section - NEW */}
+          <Card className="mb-16 border-none shadow-lg">
+            <CardContent className="p-8">
+              <h2 className="text-2xl font-bold mb-6">How NutriAI Works</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="flex flex-col items-start">
+                  <div className="bg-primary/10 p-3 rounded-full mb-4">
+                    <UserCheck className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">1. Personalized Assessment</h3>
+                  <p className="text-muted-foreground">
+                    Complete our comprehensive questionnaire that analyzes your age, health status, physical attributes, 
+                    mental wellbeing, lifestyle patterns, dietary restrictions, and fitness goals.
+                  </p>
+                </div>
+                
+                <div className="flex flex-col items-start">
+                  <div className="bg-primary/10 p-3 rounded-full mb-4">
+                    <Brain className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">2. AI Analysis</h3>
+                  <p className="text-muted-foreground">
+                    Our advanced AI algorithms process your information to create a nutrition profile unique to you, 
+                    considering thousands of data points and the latest nutritional science.
+                  </p>
+                </div>
+                
+                <div className="flex flex-col items-start">
+                  <div className="bg-primary/10 p-3 rounded-full mb-4">
+                    <Utensils className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">3. Custom Meal Plans</h3>
+                  <p className="text-muted-foreground">
+                    Receive tailor-made meal plans that respect your preferences, restrictions, and nutritional needs, 
+                    featuring seasonal and locally available ingredients for maximum nutritional benefit.
+                  </p>
+                </div>
+                
+                <div className="flex flex-col items-start">
+                  <div className="bg-primary/10 p-3 rounded-full mb-4">
+                    <CalendarDays className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">4. Adaptive Evolution</h3>
+                  <p className="text-muted-foreground">
+                    Your plan evolves as you do – our system learns from your feedback, progress, and changing needs, 
+                    continuously refining recommendations for optimal results.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Key Features Grid */}
           <div className="mb-16">
             <h2 className="text-2xl font-bold mb-8 text-center">What Makes Us Different</h2>
             
@@ -89,6 +146,68 @@ const About = () => {
                 title="Real-Time Analysis"
                 description="Get immediate insights into the nutritional value of your meals and overall dietary patterns."
               />
+
+              {/* New Features */}
+              <FeatureCard 
+                icon={<BarChart className="h-8 w-8 text-primary" />}
+                title="Age-Specific Nutrition"
+                description="Receive recommendations tailored to your specific age group and life stage for optimal health and development."
+              />
+              
+              <FeatureCard 
+                icon={<Medal className="h-8 w-8 text-primary" />}
+                title="Weekly Cheat Day"
+                description="Every 7th day can be a guilt-free cheat day with healthy yet indulgent options aligned with your dietary preferences."
+              />
+            </div>
+          </div>
+          
+          {/* Testimonials Section - NEW */}
+          <div className="mb-16">
+            <h2 className="text-2xl font-bold mb-8 text-center">What Our Users Say</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="shadow-md">
+                <CardContent className="p-6">
+                  <div className="flex flex-col space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span className="text-primary font-bold">JD</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold">John D.</p>
+                        <p className="text-muted-foreground text-sm">Age 42, Lost 25 lbs</p>
+                      </div>
+                    </div>
+                    <p className="italic">
+                      "NutriAI completely changed my relationship with food. The personalized meal plans made 
+                      healthy eating so much easier, and the cheat day options kept me motivated without feeling 
+                      deprived. After 6 months, I've reached my goal weight and have more energy than ever!"
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="shadow-md">
+                <CardContent className="p-6">
+                  <div className="flex flex-col space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span className="text-primary font-bold">SP</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Sarah P.</p>
+                        <p className="text-muted-foreground text-sm">Age 35, Fitness Enthusiast</p>
+                      </div>
+                    </div>
+                    <p className="italic">
+                      "As someone with specific dietary needs due to my training schedule, NutriAI has been 
+                      a game-changer. The age-specific recommendations helped me optimize my nutrition for 
+                      recovery, and the seasonal food focus introduced me to new ingredients I now love!"
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
           
@@ -108,7 +227,7 @@ const About = () => {
             </div>
           </div>
           
-          {/* Team Section Placeholder */}
+          {/* Team Section */}
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-6">Our Team</h2>
             <p className="text-lg mb-4 max-w-2xl mx-auto">
