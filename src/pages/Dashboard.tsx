@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,6 +39,7 @@ import Navbar from "@/components/Navbar";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 const Dashboard = () => {
   const isMobile = useIsMobile();
@@ -47,6 +47,7 @@ const Dashboard = () => {
   
   const [userName, setUserName] = useState("User");
   const [loadingMealPlan, setLoadingMealPlan] = useState(true);
+  const [userAge, setUserAge] = useState(35); // Default age
   
   useEffect(() => {
     // Check if user is authenticated
@@ -62,6 +63,9 @@ const Dashboard = () => {
       const user = JSON.parse(userData);
       if (user.name) {
         setUserName(user.name.split(" ")[0]);
+      }
+      if (user.age) {
+        setUserAge(user.age);
       }
     }
     
@@ -91,6 +95,100 @@ const Dashboard = () => {
   ];
   
   const MACRO_COLORS = ["#10b981", "#6366f1", "#f59e0b"];
+  
+  // Age-specific recommendations
+  const getAgeRecommendations = (age) => {
+    if (age < 18) {
+      return {
+        title: "Teen Nutrition",
+        recommendations: [
+          {
+            title: "Calcium for Growth",
+            description: "Focus on calcium-rich foods like dairy, fortified non-dairy beverages, and leafy greens to support bone development.",
+            foods: ["Yogurt", "Milk", "Cheese", "Fortified cereals", "Leafy greens"]
+          },
+          {
+            title: "Iron for Development",
+            description: "Teenage bodies need iron for muscle development and blood health. Include lean meats, beans, and iron-fortified foods.",
+            foods: ["Lean beef", "Beans", "Lentils", "Spinach", "Tofu"]
+          },
+          {
+            title: "Healthy Snacking",
+            description: "Support your active lifestyle with nutrient-dense snacks that provide sustained energy throughout the day.",
+            foods: ["Nut butter with fruit", "Trail mix", "Hummus with vegetables", "Smoothies"]
+          }
+        ]
+      };
+    } 
+    else if (age >= 18 && age < 30) {
+      return {
+        title: "Young Adult Nutrition",
+        recommendations: [
+          {
+            title: "Metabolism Support",
+            description: "Your metabolism is still relatively high, but balanced meals help maintain energy and prevent weight fluctuations.",
+            foods: ["Lean proteins", "Complex carbs", "Healthy fats", "Colorful vegetables"]
+          },
+          {
+            title: "Stress Management",
+            description: "Balance work and lifestyle stress with foods that support brain health and reduce inflammation.",
+            foods: ["Fatty fish", "Berries", "Dark chocolate", "Fermented foods", "Green tea"]
+          },
+          {
+            title: "Fitness Optimization",
+            description: "Support your active lifestyle with nutrients that aid recovery and improve performance.",
+            foods: ["Protein-rich foods", "Whole grains", "Bananas", "Tart cherries", "Sweet potatoes"]
+          }
+        ]
+      };
+    }
+    else if (age >= 30 && age < 50) {
+      return {
+        title: "Adult Nutrition Priorities",
+        recommendations: [
+          {
+            title: "Metabolism Management",
+            description: "As metabolism naturally slows, focus on nutrient-dense foods that provide satiety with fewer calories.",
+            foods: ["Lean proteins", "Fiber-rich vegetables", "Berries", "Greek yogurt", "Nuts"]
+          },
+          {
+            title: "Heart Health",
+            description: "Begin prioritizing cardiovascular health with foods that support healthy cholesterol and blood pressure.",
+            foods: ["Fatty fish", "Olive oil", "Avocados", "Whole grains", "Leafy greens"]
+          },
+          {
+            title: "Antioxidant Protection",
+            description: "Combat cellular aging and support immune function with antioxidant-rich foods.",
+            foods: ["Berries", "Colorful vegetables", "Green tea", "Dark chocolate", "Nuts"]
+          }
+        ]
+      };
+    }
+    else {
+      return {
+        title: "Mature Adult Nutrition",
+        recommendations: [
+          {
+            title: "Bone Health Priority",
+            description: "Calcium and vitamin D become increasingly important to maintain bone density and prevent osteoporosis.",
+            foods: ["Dairy or fortified alternatives", "Sardines", "Tofu", "Leafy greens", "Fortified cereals"]
+          },
+          {
+            title: "Anti-Inflammatory Focus",
+            description: "Minimize inflammation with foods rich in omega-3 fatty acids and antioxidants.",
+            foods: ["Fatty fish", "Walnuts", "Flaxseeds", "Turmeric", "Berries", "Olive oil"]
+          },
+          {
+            title: "Digestive Health",
+            description: "Support changing digestive needs with fiber-rich foods and probiotics.",
+            foods: ["Yogurt", "Kefir", "Whole grains", "Beans", "Fruits with edible skins"]
+          }
+        ]
+      };
+    }
+  };
+  
+  const ageRecommendations = getAgeRecommendations(userAge);
   
   const breakfastItems = [
     {
@@ -240,11 +338,12 @@ const Dashboard = () => {
         </div>
         
         <Tabs defaultValue="meal-plan" className="space-y-8">
-          <TabsList className="grid grid-cols-4 h-12 glass">
+          <TabsList className="grid grid-cols-5 h-12 glass">
             <TabsTrigger value="meal-plan">Meal Plan</TabsTrigger>
             <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
             <TabsTrigger value="fitness">Fitness</TabsTrigger>
             <TabsTrigger value="challenges">Challenges</TabsTrigger>
+            <TabsTrigger value="age-specific">Age Specific</TabsTrigger>
           </TabsList>
           
           {/* Meal Plan Tab */}
@@ -270,7 +369,7 @@ const Dashboard = () => {
                       <span>Protein</span>
                       <span className="font-medium">85 / 100 g</span>
                     </div>
-                    <Progress value={85} className="h-2 bg-secondary/50" indicatorClassName="bg-emerald-500" />
+                    <Progress value={85} className={cn("h-2 bg-secondary/50")} />
                   </div>
                   
                   <div className="space-y-2">
@@ -278,7 +377,7 @@ const Dashboard = () => {
                       <span>Carbs</span>
                       <span className="font-medium">220 / 250 g</span>
                     </div>
-                    <Progress value={88} className="h-2 bg-secondary/50" indicatorClassName="bg-indigo-500" />
+                    <Progress value={88} className={cn("h-2 bg-secondary/50")} />
                   </div>
                   
                   <div className="space-y-2">
@@ -286,7 +385,7 @@ const Dashboard = () => {
                       <span>Fats</span>
                       <span className="font-medium">55 / 65 g</span>
                     </div>
-                    <Progress value={85} className="h-2 bg-secondary/50" indicatorClassName="bg-amber-500" />
+                    <Progress value={85} className={cn("h-2 bg-secondary/50")} />
                   </div>
                   
                   <div className="space-y-2">
@@ -294,7 +393,7 @@ const Dashboard = () => {
                       <span>Hydration</span>
                       <span className="font-medium">5 / 8 glasses</span>
                     </div>
-                    <Progress value={62} className="h-2 bg-secondary/50" indicatorClassName="bg-blue-500" />
+                    <Progress value={62} className={cn("h-2 bg-secondary/50")} />
                   </div>
                 </CardContent>
                 <CardFooter>
@@ -511,7 +610,7 @@ const Dashboard = () => {
                       <span className="text-sm">Protein (30%)</span>
                       <span className="text-sm font-medium">85g / 100g</span>
                     </div>
-                    <Progress value={85} className="h-2" indicatorClassName="bg-emerald-500" />
+                    <Progress value={85} className={cn("h-2", "bg-emerald-500/10")} />
                   </div>
                   
                   <div className="space-y-2">
@@ -519,7 +618,7 @@ const Dashboard = () => {
                       <span className="text-sm">Carbohydrates (45%)</span>
                       <span className="text-sm font-medium">220g / 250g</span>
                     </div>
-                    <Progress value={88} className="h-2" indicatorClassName="bg-indigo-500" />
+                    <Progress value={88} className={cn("h-2", "bg-indigo-500/10")} />
                   </div>
                   
                   <div className="space-y-2">
@@ -527,7 +626,7 @@ const Dashboard = () => {
                       <span className="text-sm">Healthy Fats (25%)</span>
                       <span className="text-sm font-medium">55g / 65g</span>
                     </div>
-                    <Progress value={85} className="h-2" indicatorClassName="bg-amber-500" />
+                    <Progress value={85} className={cn("h-2", "bg-amber-500/10")} />
                   </div>
                   
                   <Separator />
@@ -624,6 +723,7 @@ const Dashboard = () => {
                     <h3 className="text-lg font-medium">Additional Nutrients</h3>
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      
                       <div className="space-y-1">
                         <div className="flex justify-between">
                           <span className="text-sm">Fiber</span>
@@ -637,437 +737,4 @@ const Dashboard = () => {
                           <span className="text-sm">Sugar</span>
                           <span className="text-sm font-medium">35g / 50g</span>
                         </div>
-                        <Progress value={70} className="h-2" />
-                      </div>
-                      
-                      <div className="space-y-1">
-                        <div className="flex justify-between">
-                          <span className="text-sm">Sodium</span>
-                          <span className="text-sm font-medium">1,800mg / 2,300mg</span>
-                        </div>
-                        <Progress value={78} className="h-2" />
-                      </div>
-                      
-                      <div className="space-y-1">
-                        <div className="flex justify-between">
-                          <span className="text-sm">Potassium</span>
-                          <span className="text-sm font-medium">3,100mg / 3,500mg</span>
-                        </div>
-                        <Progress value={89} className="h-2" />
-                      </div>
-                      
-                      <div className="space-y-1">
-                        <div className="flex justify-between">
-                          <span className="text-sm">Calcium</span>
-                          <span className="text-sm font-medium">900mg / 1,000mg</span>
-                        </div>
-                        <Progress value={90} className="h-2" />
-                      </div>
-                      
-                      <div className="space-y-1">
-                        <div className="flex justify-between">
-                          <span className="text-sm">Iron</span>
-                          <span className="text-sm font-medium">12mg / 18mg</span>
-                        </div>
-                        <Progress value={67} className="h-2" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          {/* Fitness Tab */}
-          <TabsContent value="fitness" className="space-y-6 animate-fade-in">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <Card className="lg:col-span-2 glass">
-                <CardHeader>
-                  <CardTitle>Recommended Exercises</CardTitle>
-                  <CardDescription>Based on your fitness goals and preferences</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {exerciseRecommendations.map((exercise, index) => (
-                    <div key={index} className="bg-secondary/30 rounded-lg p-4">
-                      <div className="flex flex-col md:flex-row md:items-start md:justify-between">
-                        <div>
-                          <h3 className="font-semibold mb-1">{exercise.name}</h3>
-                          <p className="text-sm text-muted-foreground mb-3">{exercise.description}</p>
-                          
-                          <div className="flex flex-wrap gap-2 mb-3">
-                            {exercise.benefits.map((benefit, i) => (
-                              <Badge key={i} variant="outline" className="bg-primary/10">
-                                {benefit}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        <div className="flex gap-3 mt-3 md:mt-0">
-                          <div className="text-center">
-                            <div className="text-xs text-muted-foreground">Duration</div>
-                            <div className="font-medium">{exercise.duration}</div>
-                          </div>
-                          
-                          <div className="text-center">
-                            <div className="text-xs text-muted-foreground">Intensity</div>
-                            <div className="font-medium">{exercise.intensity}</div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex justify-end mt-2">
-                        <Button variant="ghost" size="sm">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                          </svg>
-                          Watch Tutorial
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" className="w-full">
-                    View Full Workout Plan
-                  </Button>
-                </CardFooter>
-              </Card>
-              
-              <Card className="glass">
-                <CardHeader>
-                  <CardTitle>Fitness Tracker</CardTitle>
-                  <CardDescription>Track your activity and progress</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium">Today's Activity</h3>
-                    
-                    <div className="grid grid-cols-3 gap-2">
-                      <div className="p-3 rounded-lg bg-secondary/30 text-center">
-                        <div className="text-2xl font-bold">3,241</div>
-                        <div className="text-xs text-muted-foreground">Steps</div>
-                      </div>
-                      
-                      <div className="p-3 rounded-lg bg-secondary/30 text-center">
-                        <div className="text-2xl font-bold">25</div>
-                        <div className="text-xs text-muted-foreground">Minutes</div>
-                      </div>
-                      
-                      <div className="p-3 rounded-lg bg-secondary/30 text-center">
-                        <div className="text-2xl font-bold">180</div>
-                        <div className="text-xs text-muted-foreground">Calories</div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium">Weekly Activity</h3>
-                    
-                    <div className="h-40">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={weeklyProgress}>
-                          <defs>
-                            <linearGradient id="colorActivity" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8} />
-                              <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.1} />
-                            </linearGradient>
-                          </defs>
-                          <XAxis dataKey="day" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
-                          <YAxis tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
-                          <Tooltip
-                            contentStyle={{
-                              backgroundColor: "hsl(var(--card))",
-                              borderColor: "hsl(var(--border))",
-                              borderRadius: "var(--radius)",
-                              fontSize: "12px"
-                            }}
-                          />
-                          <Area
-                            type="monotone"
-                            dataKey="calories"
-                            stroke="hsl(var(--primary))"
-                            fillOpacity={1}
-                            fill="url(#colorActivity)"
-                            name="Active Minutes"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium">Your Recent Achievements</h3>
-                    
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                            <path d="M8.21 13.89L7 23l9-9-8.99-9-.79 9.01"></path>
-                            <path d="M13.33 6.67C13.33 4.28 11.39 2.34 9 2.34S4.67 4.28 4.67 6.67c0 2.1 1.45 3.82 3.33 4.28"></path>
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium">3-Day Streak</div>
-                          <div className="text-xs text-muted-foreground">Keep it up!</div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                            <path d="M8 9l5 5 5-5"></path>
-                            <path d="M21 15V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"></path>
-                            <path d="M18 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium">First Workout Complete</div>
-                          <div className="text-xs text-muted-foreground">You did it!</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button className="w-full">
-                    Log Activity
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-          </TabsContent>
-          
-          {/* Challenges Tab */}
-          <TabsContent value="challenges" className="space-y-6 animate-fade-in">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <Card className="lg:col-span-2 glass">
-                <CardHeader>
-                  <CardTitle>Weekly Challenge</CardTitle>
-                  <CardDescription>Join others in this community challenge</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="bg-secondary/30 rounded-lg p-6">
-                    <h3 className="text-xl font-semibold mb-3">{weeklyChallenge.title}</h3>
-                    <p className="text-muted-foreground mb-6">{weeklyChallenge.description}</p>
-                    
-                    <div className="mb-4">
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm">Your Progress</span>
-                        <span className="text-sm font-medium">{weeklyChallenge.progress} / {weeklyChallenge.goal} days</span>
-                      </div>
-                      <Progress value={(weeklyChallenge.progress / weeklyChallenge.goal) * 100} className="h-3" />
-                    </div>
-                    
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <path d="M5 17V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v12"></path>
-                            <path d="M15 21v-4a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v4"></path>
-                            <circle cx="9" cy="7" r="2"></circle>
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="text-sm text-muted-foreground">Participants</div>
-                          <div className="font-medium">{weeklyChallenge.participants}</div>
-                        </div>
-                      </div>
-                      
-                      <Button size="sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                          <circle cx="8.5" cy="7" r="4"></circle>
-                          <line x1="20" y1="8" x2="20" y2="14"></line>
-                          <line x1="23" y1="11" x2="17" y2="11"></line>
-                        </svg>
-                        Invite Friends
-                      </Button>
-                    </div>
-                    
-                    <div>
-                      <h4 className="font-medium mb-3">Tips for Success</h4>
-                      <ul className="space-y-2">
-                        {weeklyChallenge.tips.map((tip, index) => (
-                          <li key={index} className="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary mt-1 mr-2">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                            <span className="text-sm">{tip}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="flex justify-between">
-                  <Button variant="outline">
-                    View All Challenges
-                  </Button>
-                  <Button>
-                    Log Today's Progress
-                  </Button>
-                </CardFooter>
-              </Card>
-              
-              <Card className="glass">
-                <CardHeader>
-                  <CardTitle>Leaderboard</CardTitle>
-                  <CardDescription>Top participants in the challenge</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-secondary/30">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-7 h-7 flex items-center justify-center font-medium">
-                            {index + 1}
-                          </div>
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                            {index === 0 ? (
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                              </svg>
-                            ) : (
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <circle cx="12" cy="12" r="3"></circle>
-                              </svg>
-                            )}
-                          </div>
-                          <div>
-                            <div className="text-sm font-medium">
-                              {index === 2 ? "You" : `User ${100 + index}`}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {index === 0 ? "7/7 days" : index === 1 ? "6/7 days" : index === 2 ? "3/7 days" : index === 3 ? "2/7 days" : "1/7 days"}
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {index === 0 && (
-                          <Badge variant="outline" className="bg-amber-500/10 text-amber-500 border-amber-500/20">
-                            Gold
-                          </Badge>
-                        )}
-                        {index === 1 && (
-                          <Badge variant="outline" className="bg-slate-400/10 text-slate-400 border-slate-400/20">
-                            Silver
-                          </Badge>
-                        )}
-                        {index === 2 && (
-                          <Badge variant="outline" className="bg-amber-700/10 text-amber-700 border-amber-700/20">
-                            Bronze
-                          </Badge>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div>
-                    <h3 className="text-sm font-medium mb-2">Your Challenge History</h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <div className="text-sm">Completed Challenges</div>
-                        <div className="font-medium">8</div>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <div className="text-sm">Success Rate</div>
-                        <div className="font-medium">75%</div>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <div className="text-sm">Best Streak</div>
-                        <div className="font-medium">14 days</div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" className="w-full">
-                    View All Statistics
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </div>
-  );
-};
-
-const MealCard = ({ meal }: { 
-  meal: { 
-    name: string; 
-    description: string; 
-    nutrients: { 
-      calories: number; 
-      protein: number; 
-      carbs: number; 
-      fat: number;
-    };
-    tags: string[];
-  } 
-}) => {
-  return (
-    <div className="bg-background/70 rounded-lg overflow-hidden shadow-soft transition-all hover:shadow-md hover:-translate-y-1">
-      <div className="p-4">
-        <h4 className="font-semibold mb-1">{meal.name}</h4>
-        <p className="text-sm text-muted-foreground mb-3">{meal.description}</p>
-        
-        <div className="flex flex-wrap gap-1 mb-3">
-          {meal.tags.map((tag, index) => (
-            <Badge key={index} variant="outline" className="bg-primary/10 text-xs">
-              {tag}
-            </Badge>
-          ))}
-        </div>
-        
-        <div className="grid grid-cols-4 gap-2 text-center text-xs">
-          <div>
-            <div className="font-semibold">{meal.nutrients.calories}</div>
-            <div className="text-muted-foreground">kcal</div>
-          </div>
-          <div>
-            <div className="font-semibold text-emerald-500">{meal.nutrients.protein}g</div>
-            <div className="text-muted-foreground">Protein</div>
-          </div>
-          <div>
-            <div className="font-semibold text-indigo-500">{meal.nutrients.carbs}g</div>
-            <div className="text-muted-foreground">Carbs</div>
-          </div>
-          <div>
-            <div className="font-semibold text-amber-500">{meal.nutrients.fat}g</div>
-            <div className="text-muted-foreground">Fats</div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="bg-secondary/30 px-4 py-2 flex justify-between items-center">
-        <Button variant="ghost" size="sm" className="text-xs h-8">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-            <polygon points="5 3 19 12 5 21 5 3"></polygon>
-          </svg>
-          Recipe
-        </Button>
-        
-        <Button variant="ghost" size="sm" className="text-xs h-8">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-          </svg>
-          Swap
-        </Button>
-      </div>
-    </div>
-  );
-};
-
-export default Dashboard;
+                        <Progress value={70} className
